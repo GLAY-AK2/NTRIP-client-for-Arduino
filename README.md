@@ -2,5 +2,6 @@
 
 This Repository has none sorce now. Please wait.
 
-I'm developing http client connect to NTRIP caster for high precision reciver.
-arduino use wifi on freertos. For Example, ESP8266, ESP32.
+I am developing an http client that connects to NTRIP casters for high precision receivers.
+/*arduino uses wifi with freertos.*/
+For Example, ESP8266, ESP32.
