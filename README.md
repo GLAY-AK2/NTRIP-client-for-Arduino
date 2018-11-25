@@ -4,7 +4,7 @@ DGPS (Differential GPS) and RTK (GPS positioning with centimeter level accuracy)
 NTRIP caster relays GNSS reference position data Stream from BaseStation (GNSS reference position is called that) to GNSS rover via NTRIP protocol.
 NTRIP client get GNSS reference data from NTRIP casters for high precision receivers via Internet.
 
-This suports request Source Table (NTRIP caster has many BaseStation data. Caster informe all of these. its List is called "Source Table".) and GNSS Reference Data.
+This suports request Source Table (NTRIP caster has many BaseStation data. Caster informe all of these. Its List is called "Source Table".) and GNSS Reference Data.
 
 # How to use
 Please check sample source.
