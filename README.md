@@ -10,7 +10,7 @@ This suports request Source Table (NTRIP caster has many BaseStation data. Caste
 Please check sample source.
 
 This source has NTRIPClient class based on WiFiClient.
-This Developed on ESP-IDF for Arduino-IDE
+This Developed on ESP32 core for Arduino
 if you want to use Other function, please check WiFiClient.
 
 ### Support
