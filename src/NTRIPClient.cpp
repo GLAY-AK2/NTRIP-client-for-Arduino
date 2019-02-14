@@ -1,46 +1,13 @@
-#include "NTRIPClient.h"
-
-NTRIPClient::NTRIPClient(char* host,int port,char* mntpnt,char* user,char* psw)
+#include"NtripClient.hpp"
+bool NtripClient::reqSrcTbl(char* host,int port)
 {
-  _host = host;
-  _port = port;
-  _mntpnt = mntpnt;
-  _user = user;
-  _psw = psw;
-}
-
-int NTRIPClient::connect()
-{
-  return connect(_host,_port);
-}
-
-const char* NTRIPClient::encbase64(const unsigned char *byte, int n)
-{
-    const char table[]=
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    int i,j,k,b;
-    String str; 
-    
-    Serial.println("passwd encording");
-    
-    for (i=j=0;i/8<n;) {
-        for (k=b=0;k<6;k++,i++) {
-            b<<=1; if (i/8<n) b|=(byte[i/8]>>(7-i%8))&0x1;
-        }
-        str = str + table[b];
-    }
-    while (j&0x3) str = str + '=';
-    
-    Serial.println("passwd encorded!\n");
-    return str.c_str();
-}
-
-bool NTRIPClient::reqSrcTbl()
-{
-  String p="";
-  p = String("GET ") + String("/") + String(" HTTP/1.0\r\n");
-  p = p + String("User-Agent: NTRIP Enbeded\r\n");
-  print(p);
+  if(connect(host,port))return false;
+  /*p = String("GET ") + String("/") + String(" HTTP/1.0\r\n");
+  p = p + String("User-Agent: NTRIP Enbeded\r\n");*/
+  print(
+      "GET / HTTP/1.0\r\n"
+      "User-Agent: NTRIP Enbeded\r\n"
+      );
   unsigned long timeout = millis();
   while (available() == 0) {
      if (millis() - timeout > 5000) {
@@ -48,64 +15,82 @@ bool NTRIPClient::reqSrcTbl()
         stop();
         return false;
      }
+     delay(10);
   }
-  readLine();
-  if(strncmp((char*)_buffer,"SOURCETABLE 200 OK",17))
+  char buffer[50];
+  readLine(buffer,sizeof(buffer));
+  if(strncmp((char*)buffer,"SOURCETABLE 200 OK",17))
   {
-    Serial.print((char*)_buffer);
+    Serial.print((char*)buffer);
     return false;
   }
   return true;
+    
 }
-
-bool NTRIPClient::reqRaw()
+bool NtripClient::reqRaw(char* host,int port,char* mntpnt,char* user,char* psw)
 {
-  String p="";
+    if(connect(host,port))return false;
+    String p="GET /";
     String auth="";
     Serial.println("Request Ntrip");
     
-    p = String("GET ") + String("/") + _mntpnt + String(" HTTP/1.0\r\n");
-    p = p + String("User-Agent: NTRIP Enbeded\r\n");
+    p = p + mntpnt + String(" HTTP/1.0\r\n"
+        "User-Agent: NTRIP Enbeded\r\n"
+    );
     
-    if (strlen(_user)==0) {
-        p = p + String("Accept: */*\r\n");
-        p = p + String("Connection: close\r\n");
+    if (strlen(user)==0) {
+        p = p + String(
+            "Accept: */*\r\n"
+            "Connection: close\r\n"
+            );
     }
     else {
-        auth = _user + String(":") + _psw;
-        Serial.println(auth);
+        auth = base64::encode(String(user) + String(":") + psw);
+        #ifdef Debug
+        Serial.println(String(user) + String(":") + psw);
+        #endif
+
         p = p + String("Authorization: Basic ");
-        p = p + encbase64((unsigned char *)auth.c_str(),strlen(auth.c_str()));
+        p = p + auth;
         p = p + String("\r\n");
     }
     p = p + String("\r\n");
     print(p);
+    #ifdef Debug
     Serial.println(p);
+    #endif
     unsigned long timeout = millis();
     while (available() == 0) {
-        if (millis() - timeout > 50000) {
+        if (millis() - timeout > 20000) {
             Serial.println("Client Timeout !");
             return false;
         }
+        delay(10);
     }
-    readLine();
-    if(strncmp((char*)_buffer,"ICY 200 OK",10))
+    char buffer[50];
+    readLine(buffer,sizeof(buffer));
+    if(strncmp((char*)buffer,"ICY 200 OK",10))
     {
-      Serial.print((char*)_buffer);
+      Serial.print((char*)buffer);
       return false;
     }
     return true;
 }
-
-char* NTRIPClient::readLine()
+bool NtripClient::reqRaw(char* host,int port,char* mntpnt)
+{
+    reqRaw(host,port,mntpnt,"","");
+}
+int NtripClient::readLine(char* _buffer,int size)
 {
   int len = 0;
   while(available()) {
     _buffer[len] = read();
     len++;
-    if(_buffer[len-1] == '\n' || len > 510) break;
+    if(_buffer[len-1] == '\n' || len >= size) break;
   }
   _buffer[len]='\0';
-  Serial.print((char*)_buffer); 
-  return (char*)_buffer;
+  #ifdef Debug
+  Serial.print(_buffer); 
+  #endif
+  return len;
 }

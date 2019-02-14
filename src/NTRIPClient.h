@@ -1,26 +1,17 @@
 #ifndef NTRIP_CLIENT
 #define NTRIP_CLIENT
 
-#include <WiFi.h>
+#include <WiFiClient.h>
 #include <Arduino.h>
+#include<base64.h>
 
-class NTRIPClient : public WiFiClient{
-  private :
-  char *_host;
-  int  _port;
-  char *_mntpnt;
-  char *_user;
-  char *_psw;
-  byte _buffer[512];
-  const char* encbase64(const unsigned char *byte, int n);
-  
+class NtripClient : public WiFiClient{
   public :
-  using WiFiClient::connect;
-  NTRIPClient(char* host,int port,char* mntpnt,char* user,char* psw);
-  bool reqSrcTbl();   //request MountPoints List serviced the NTRIP Caster 
-  bool reqRaw();      //request RAW data from Caster  
-  char *readLine();
-  int connect();
+  bool reqSrcTbl(char* host,int port);   //request MountPoints List serviced the NTRIP Caster 
+  bool reqRaw(char* host,int port,char* mntpnt,char* user,char* psw);      //request RAW data from Caster 
+  bool reqRaw(char* host,int port,char* mntpnt); //non user
+  int readLine(char* buffer,int size);
+
   
 };
 
