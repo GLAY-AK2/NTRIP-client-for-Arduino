@@ -6,6 +6,8 @@
  * 
  * 
  */
+//#include <ESP8266WiFi.h>  //Need for ESP8266
+#include <WiFi.h>           //Need for ESP32 
 #include "NTRIPClient.h"
 
 const char* ssid     = "your_ssid";
@@ -32,11 +34,6 @@ void setup() {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-
-  if (!ntrip_c.connect()) {
-    Serial.println("connection failed\n");
-    return;
-  }
   
   Serial.println("Requesting SourceTable.");
   if(ntrip_c.reqSrcTbl()){
@@ -51,10 +48,6 @@ void setup() {
   Serial.print("Requesting SourceTable is OK\n");
   ntrip_c.stop();
   
-  if (!ntrip_c.connect()) {
-    Serial.println("connection failed\n");
-    return;
-  }
   Serial.println("Requesting MountPoint's Raw data");
   if(!ntrip_c.reqRaw()){
     delay(15000);
