@@ -1,12 +1,12 @@
-#include"NtripClient.hpp"
-bool NtripClient::reqSrcTbl(char* host,int port)
+#include"NTRIPClient.h"
+bool NTRIPClient::reqSrcTbl(char* host,int port)
 {
   if(connect(host,port))return false;
   /*p = String("GET ") + String("/") + String(" HTTP/1.0\r\n");
   p = p + String("User-Agent: NTRIP Enbeded\r\n");*/
   print(
       "GET / HTTP/1.0\r\n"
-      "User-Agent: NTRIP Enbeded\r\n"
+      "User-Agent: NTRIPClient for Arduino v1.0\r\n"
       );
   unsigned long timeout = millis();
   while (available() == 0) {
@@ -27,15 +27,15 @@ bool NtripClient::reqSrcTbl(char* host,int port)
   return true;
     
 }
-bool NtripClient::reqRaw(char* host,int port,char* mntpnt,char* user,char* psw)
+bool NTRIPClient::reqRaw(char* host,int port,char* mntpnt,char* user,char* psw)
 {
     if(connect(host,port))return false;
     String p="GET /";
     String auth="";
-    Serial.println("Request Ntrip");
+    Serial.println("Request NTRIP");
     
     p = p + mntpnt + String(" HTTP/1.0\r\n"
-        "User-Agent: NTRIP Enbeded\r\n"
+        "User-Agent: NTRIPClient for Arduino v1.0\r\n"
     );
     
     if (strlen(user)==0) {
@@ -76,11 +76,11 @@ bool NtripClient::reqRaw(char* host,int port,char* mntpnt,char* user,char* psw)
     }
     return true;
 }
-bool NtripClient::reqRaw(char* host,int port,char* mntpnt)
+bool NTRIPClient::reqRaw(char* host,int port,char* mntpnt)
 {
     reqRaw(host,port,mntpnt,"","");
 }
-int NtripClient::readLine(char* _buffer,int size)
+int NTRIPClient::readLine(char* _buffer,int size)
 {
   int len = 0;
   while(available()) {
