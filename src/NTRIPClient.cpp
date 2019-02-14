@@ -1,8 +1,11 @@
 #include"NTRIPClient.h"
-bool NTRIPClient::reqSrcTbl(char* host,int port)
+bool NTRIPClient::reqSrcTbl(char* host,int &port)
 {
-  if(connect(host,port))return false;
-  /*p = String("GET ") + String("/") + String(" HTTP/1.0\r\n");
+  if(!connect(host,port)){
+      Serial.print("Cannot connect to ");
+      Serial.println(host);
+      return false;
+  }/*p = String("GET ") + String("/") + String(" HTTP/1.0\r\n");
   p = p + String("User-Agent: NTRIP Enbeded\r\n");*/
   print(
       "GET / HTTP/1.0\r\n"
@@ -27,9 +30,9 @@ bool NTRIPClient::reqSrcTbl(char* host,int port)
   return true;
     
 }
-bool NTRIPClient::reqRaw(char* host,int port,char* mntpnt,char* user,char* psw)
+bool NTRIPClient::reqRaw(char* host,int &port,char* mntpnt,char* user,char* psw)
 {
-    if(connect(host,port))return false;
+    if(!connect(host,port))return false;
     String p="GET /";
     String auth="";
     Serial.println("Request NTRIP");
@@ -76,7 +79,7 @@ bool NTRIPClient::reqRaw(char* host,int port,char* mntpnt,char* user,char* psw)
     }
     return true;
 }
-bool NTRIPClient::reqRaw(char* host,int port,char* mntpnt)
+bool NTRIPClient::reqRaw(char* host,int &port,char* mntpnt)
 {
     reqRaw(host,port,mntpnt,"","");
 }
@@ -89,8 +92,6 @@ int NTRIPClient::readLine(char* _buffer,int size)
     if(_buffer[len-1] == '\n' || len >= size) break;
   }
   _buffer[len]='\0';
-  #ifdef Debug
-  Serial.print(_buffer); 
-  #endif
+
   return len;
 }
