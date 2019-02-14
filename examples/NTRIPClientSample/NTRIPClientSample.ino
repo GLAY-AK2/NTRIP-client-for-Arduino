@@ -14,11 +14,11 @@ const char* ssid     = "your_ssid";
 const char* password = "your_password";
 
 char* host = "ntrip caster host";
-int httpPort = 2101;
+int httpPort = 2101; //port 2101 is default port of NTRIP caster
 char* mntpnt = "ntrip caster's mountpoint";
 char* user   = "ntrip caster's client user";
 char* passwd = "ntrip caster's client password";
-NTRIPClient ntrip_c(host,httpPort,mntpnt,user,passwd);
+NTRIPClient ntrip_c();
 
 void setup() {
   // put your setup code here, to run once:
@@ -36,20 +36,21 @@ void setup() {
   Serial.println(WiFi.localIP());
   
   Serial.println("Requesting SourceTable.");
-  if(ntrip_c.reqSrcTbl()){
+  if(ntrip_c.reqSrcTbl(host,httpPort)){
+    char buffer[512];
     delay(5);
     while(ntrip_c.available()){
-      ntrip_c.readLine();  
+      ntrip_c.readLine(buffer,sizeof(buffer));  
     }
   }
   else{
     Serial.println("SourceTable request error");
   }
   Serial.print("Requesting SourceTable is OK\n");
-  ntrip_c.stop();
+  ntrip_c.stop(); //Need to call "stop" function for next request.
   
   Serial.println("Requesting MountPoint's Raw data");
-  if(!ntrip_c.reqRaw()){
+  if(!ntrip_c.reqRaw(host,httpPort,mntpnt,user,passwd)){
     delay(15000);
     ESP.restart();
   }
