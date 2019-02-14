@@ -40,7 +40,8 @@ void setup() {
     char buffer[512];
     delay(5);
     while(ntrip_c.available()){
-      ntrip_c.readLine(buffer,sizeof(buffer));  
+      ntrip_c.readLine(buffer,sizeof(buffer));
+      Serial.print(buffer); 
     }
   }
   else{
