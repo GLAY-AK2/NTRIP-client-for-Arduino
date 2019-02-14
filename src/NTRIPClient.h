@@ -5,7 +5,7 @@
 #include <Arduino.h>
 #include<base64.h>
 
-class NtripClient : public WiFiClient{
+class NTRIPClient : public WiFiClient{
   public :
   bool reqSrcTbl(char* host,int port);   //request MountPoints List serviced the NTRIP Caster 
   bool reqRaw(char* host,int port,char* mntpnt,char* user,char* psw);      //request RAW data from Caster 
