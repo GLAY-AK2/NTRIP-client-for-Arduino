@@ -18,7 +18,7 @@ int httpPort = 2101; //port 2101 is default port of NTRIP caster
 char* mntpnt = "ntrip caster's mountpoint";
 char* user   = "ntrip caster's client user";
 char* passwd = "ntrip caster's client password";
-NTRIPClient ntrip_c();
+NTRIPClient ntrip_c;
 
 void setup() {
   // put your setup code here, to run once:
