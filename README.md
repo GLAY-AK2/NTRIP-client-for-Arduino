@@ -23,5 +23,6 @@ And, I'm Japanese. Help me for English.
 
 # Updates
 First Commit : Support for ESP32.
+
 2/15 : Compatible with ESP8266. if you can use this, source code needs to include "ESP8266WiFi.h".
        Source code needs to include "WiFi.h" for ESP32.
