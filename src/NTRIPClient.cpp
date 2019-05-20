@@ -81,7 +81,7 @@ bool NTRIPClient::reqRaw(char* host,int &port,char* mntpnt,char* user,char* psw)
 }
 bool NTRIPClient::reqRaw(char* host,int &port,char* mntpnt)
 {
-    reqRaw(host,port,mntpnt,"","");
+    return reqRaw(host,port,mntpnt,"","");
 }
 int NTRIPClient::readLine(char* _buffer,int size)
 {
