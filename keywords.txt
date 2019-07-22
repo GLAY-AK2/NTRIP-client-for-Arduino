@@ -1,5 +1,5 @@
 #######################################
-# Syntax Coloring Map For BluetoothSerial
+# Syntax Coloring Map For NTRIPClient
 #######################################
 
 #######################################
@@ -12,13 +12,12 @@ NTRIPClient	KEYWORD3
 # Datatypes (KEYWORD1)
 #######################################
 
-NTRIPClient	KEYWORD1
+ntrip_c	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
-ntrip_c	KEYWORD2
 reqSrcTbl	KEYWORD2
 reqRaw	KEYWORD2
 readLine	KEYWORD2
